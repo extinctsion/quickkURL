@@ -22,6 +22,7 @@ export default function Home() {
       const shortened = await shortenUrl(url)
       setShortUrl(shortened)
     } catch (err) {
+      console.error(err);
       setError("Failed to shorten URL. Please try again.")
     } finally {
       setIsLoading(false)
