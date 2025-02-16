@@ -17,13 +17,23 @@ export default function Home() {
     setIsLoading(true)
     setError("")
     setShortUrl("")
-
+    const isValidUrl = (url: string): boolean => {
+      try {
+        new URL(url);
+        return true;
+      } catch (err) {
+        console.error(err);
+        return false;
+      }
+    };
     try {
-      const shortened = await shortenUrl(url)
-      setShortUrl(shortened)
+      if (isValidUrl(url)){
+        const shortened = await shortenUrl(url)
+        setShortUrl(shortened)
+      }
     } catch (err) {
       console.error(err);
-      setError("Failed to shorten URL. Please try again.")
+      setError("Failed to shorten URL. Please try again or check your URL")
     } finally {
       setIsLoading(false)
     }
