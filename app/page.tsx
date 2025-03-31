@@ -5,12 +5,14 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { shortenUrl } from "@/lib/shorten-url"
+import { useQRCode } from "next-qrcode"
 
 export default function Home() {
   const [url, setUrl] = useState("")
   const [shortUrl, setShortUrl] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const { Canvas } = useQRCode()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -59,16 +61,38 @@ export default function Home() {
       </form>
       {error && <p className="mt-4 text-red-500">{error}</p>}
       {shortUrl && (
-        <div className="mt-8 text-center">
-          <h2 className="text-2xl font-semibold mb-2">Shortened URL:</h2>
-          <a
-            href={shortUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:underline break-all"
-          >
-            {shortUrl}
-          </a>
+        <div className="mt-8 flex items-center justify-center space-x-8">
+          {/* Left Side: Shortened URL */}
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold mb-4">Shortened URL:</h2>
+            <a
+              href={shortUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline break-all"
+            >
+              {shortUrl}
+            </a>
+          </div>
+          {/* Vertical Divider */}
+          <div className="h-24 w-px bg-black"></div>
+          {/* Right Side: QR Code */}
+          <div className="flex flex-col items-center justify-center text-center">
+            <h2 className="text-2xl font-semibold mb-4">QR Code Generated:</h2>
+            <Canvas
+              text={shortUrl}
+              options={{
+                errorCorrectionLevel: "M",
+                margin: 3,
+                scale: 4,
+                width: 150,
+                color: {
+                  dark: "#000000",
+                  light: "#FFFFFF",
+                },
+              }}
+            />
+          </div>
         </div>
       )}
     </main>
